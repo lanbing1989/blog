@@ -47,13 +47,13 @@ function pagination($page, $pages) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>我的博客</title>
+    <title>蓝冰博客</title>
     <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
 <div class="container">
     <header>
-        <h1>我的博客</h1>
+        <h1>蓝冰博客</h1>
         <p class="subtitle">—— 记录生活和技术</p>
     </header>
     <main>
@@ -63,14 +63,14 @@ function pagination($page, $pages) {
                 <a class="article-title" href="/post/<?=htmlspecialchars($art['id'])?>">
                     <?=htmlspecialchars($art['title'])?>
                 </a>
-                <span class="article-date"><?=htmlspecialchars($art['date'])?></span>
+               <span class="article-date"><?=date('Y年m月d日', strtotime($art['date']))?></span>
             </li>
         <?php endforeach; ?>
         </ul>
         <?=pagination($page, $pages)?>
     </main>
     <footer>
-        &copy; <?=date('Y')?> 我的博客 | Powered by PHP+Markdown
+        &copy; <?=date('Y')?> 蓝冰博客 | Powered by PHP+Markdown
     </footer>
 </div>
 </body>

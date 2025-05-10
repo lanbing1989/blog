@@ -30,7 +30,7 @@ $content_html = $Parsedown->text($content_md);
 <html>
 <head>
     <meta charset="utf-8">
-    <title><?=htmlspecialchars($title)?> - 我的博客</title>
+    <title><?=htmlspecialchars($title)?> - 蓝冰博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/assets/style.css">
     <style>
@@ -42,17 +42,17 @@ $content_html = $Parsedown->text($content_md);
 <div class="container">
     <header>
         <a href="/" style="text-decoration:none;color:inherit;">
-            <h1>我的博客</h1>
+            <h1>蓝冰博客</h1>
         </a>
     </header>
     <main>
         <h2><?=htmlspecialchars($title)?></h2>
-        <div class="article-date"><?=htmlspecialchars($date)?></div>
+        <div class="article-date"><?=date('Y年m月d日', strtotime($date))?></div></br>
         <div class="article-content"><?= $content_html ?></div>
         <div class="back"><a href="/">← 返回首页</a></div>
     </main>
     <footer>
-        &copy; <?=date('Y')?> 我的博客 | Powered by PHP+Markdown
+        &copy; <?=date('Y')?> 蓝冰博客 | Powered by PHP+Markdown
     </footer>
 </div>
 </body>

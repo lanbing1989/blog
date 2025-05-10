@@ -114,9 +114,95 @@ a {
     word-break: break-all;
     overflow-wrap: break-word;
 }
-pre, code {
+
+/* ==== 代码块样式增强 Start ==== */
+
+/* 块级代码，单独样式 */
+pre {
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', 'Liberation Mono', monospace;
+    background: #f6f8fa;
+    color: #333;
+    border-radius: 4px;
+    padding: 1em;
+    margin: 1.2em 0;
+    overflow: auto;
+    border: 1px solid #e1e4e8;
+    font-size: 15px;
+    line-height: 1.7;
+    box-shadow: 0 1px 2px rgba(27,31,35,0.04);
+    white-space: pre;
+}
+
+/* 行内代码 */
+code {
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', 'Liberation Mono', monospace;
+    background: #f3f4f4;
+    color: #c7254e;
+    border-radius: 3px;
+    border: 1px solid #eaeaea;
+    padding: 0.15em 0.4em;
+    font-size: 95%;
+    display: inline;
+    margin: 0 2px;
     white-space: pre-wrap;
 }
+
+/* 块级代码内的 code 元素（去除行内 code 的样式叠加） */
+pre code {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: inherit;
+    border-radius: 0;
+    display: block;
+    white-space: pre;
+}
+
+/* highlight.js 兼容，可根据实际高亮库调整 */
+pre code.hljs,
+pre.hljs,
+.hljs {
+    background: #282c34 !important;
+    color: #abb2bf !important;
+    border-radius: 4px;
+    overflow-x: auto;
+    padding: 1em;
+}
+
+/* 高亮关键字颜色示例（可根据你实际的高亮库类名调整） */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-section,
+.hljs-link {
+    color: #c678dd;
+}
+.hljs-function .hljs-title,
+.hljs-title,
+.hljs-name {
+    color: #61aeee;
+}
+.hljs-string,
+.hljs-meta,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+    color: #98c379;
+}
+.hljs-comment,
+.hljs-quote,
+.hljs-deletion {
+    color: #5c6370;
+    font-style: italic;
+}
+.hljs-number,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+    color: #d19a66;
+}
+/* ==== 代码块样式增强 End ==== */
 
 /* 主要适配移动端：宽度、内边距、字号等 */
 @media (max-width: 700px) {
@@ -166,5 +252,13 @@ pre, code {
         padding: 5px 2px;
         font-size: 0.93em;
         word-break: break-all;
+    }
+    pre {
+        font-size: 13px;
+        padding: 0.7em;
+    }
+    code {
+        font-size: 90%;
+        padding: 0.12em 0.25em;
     }
 }
