@@ -31,6 +31,7 @@ $content_html = $Parsedown->text($content_md);
 <head>
     <meta charset="utf-8">
     <title><?=htmlspecialchars($title)?> - 我的博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/assets/style.css">
     <style>
     .article-content {margin: 28px 0;}

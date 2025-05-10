@@ -1,3 +1,4 @@
+/* 基本布局与样式 */
 body {
     background: #f5f7fa;
     margin: 0; padding: 0;
@@ -12,6 +13,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 32px rgba(0,0,0,0.07);
     padding: 32px 28px 18px 28px;
+    box-sizing: border-box;
 }
 header {
     text-align: center;
@@ -42,6 +44,7 @@ header .subtitle {
     color: #337ab7;
     text-decoration: none;
     font-weight: bold;
+    word-break: break-all;
 }
 .article-title:hover {
     text-decoration: underline;
@@ -90,9 +93,35 @@ footer {
 .admin-table th,.admin-table td{border:1px solid #eee;padding:8px;}
 .admin-table th{background:#f5f7fa;}
 .op-link{margin-right:8px;}
+
+/* 全局自适应与防超宽设置 */
+html, body {
+    width: 100vw;
+    max-width: 100vw;
+    overflow-x: hidden !important;
+}
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+img, table, pre, code {
+    max-width: 100%;
+    height: auto;
+    word-break: break-all;
+    overflow-x: auto;
+    display: block;
+}
+a {
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+pre, code {
+    white-space: pre-wrap;
+}
+
+/* 主要适配移动端：宽度、内边距、字号等 */
 @media (max-width: 700px) {
     .container {
-        max-width: 100%;
+        max-width: 100vw;
         border-radius: 0;
         padding: 10px 2vw 10px 2vw;
         box-shadow: none;
@@ -113,7 +142,6 @@ footer {
     }
     .article-title {
         font-size: 1em;
-        word-break: break-all;
     }
     .article-date {
         float: none;
