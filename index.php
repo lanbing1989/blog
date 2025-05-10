@@ -1,87 +1,76 @@
-<?php include 'config.php'; ?>
-<?php $config = getBlogConfig(); ?>
+<?php
+define('ARTICLES_PER_PAGE', 5);
+$dir = __DIR__ . '/data/articles/';
+$files = glob($dir . '*.md');
+
+$articles = [];
+foreach ($files as $file) {
+    $text = file_get_contents($file);
+    if (preg_match('/---\s*title:\s*(.*?)\s*date:\s*(.*?)\s*---/s', $text, $m)) {
+        $id = basename($file, '.md');
+        $articles[] = [
+            'id'    => $id,
+            'title' => $m[1],
+            'date'  => $m[2]
+        ];
+    }
+}
+usort($articles, fn($a, $b) => strcmp($b['date'], $a['date']));
+
+$total = count($articles);
+$page = max(1, intval($_GET['page'] ?? 1));
+$pages = max(1, ceil($total / ARTICLES_PER_PAGE));
+$start = ($page - 1) * ARTICLES_PER_PAGE;
+$articles_page = array_slice($articles, $start, ARTICLES_PER_PAGE);
+
+function pagination($page, $pages) {
+    $html = '<div class="pagination">';
+    if ($page > 1) {
+        $html .= '<a href="/page/'.($page-1).'">上一页</a>';
+    }
+    for ($i = 1; $i <= $pages; $i++) {
+        if ($i == $page) {
+            $html .= "<span class='current'>{$i}</span>";
+        } else {
+            $html .= '<a href="/page/'.$i.'">'.$i.'</a>';
+        }
+    }
+    if ($page < $pages) {
+        $html .= '<a href="/page/'.($page+1).'">下一页</a>';
+    }
+    $html .= '</div>';
+    return $html;
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title><?php echo htmlspecialchars($config['blog_title']); ?></title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; max-width: 800px; margin: 0 auto; }
-        .post { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
-        .post h2 a { color: #333; text-decoration: none; }
-        .post h2 a:hover { text-decoration: underline; }
-        .meta { color: #666; font-size: 0.9em; margin-bottom: 10px; }
-        .read-more { display: inline-block; background: #333; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; }
-        .read-more:hover { background: #555; }
-        .pagination { margin-top: 20px; }
-        .pagination a { display: inline-block; padding: 5px 10px; border: 1px solid #ddd; margin-right: 5px; text-decoration: none; }
-        .pagination a.active { background: #333; color: white; }
-        .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; color: #666; font-size: 0.9em; }
-        .footer a { color: #666; }
-    </style>
+    <meta charset="utf-8">
+    <title>我的博客</title>
+    <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
-    <h1><?php echo htmlspecialchars($config['blog_title']); ?></h1>
-    <p><?php echo htmlspecialchars($config['blog_description']); ?></p>
-    
-    <div class="navigation">
-        <a href="index.php">首页</a> | 
-        <?php if (isUserLoggedIn()): ?>
-            <a href="create_post.php">写文章</a> |
-            <a href="admin_config.php">博客配置</a> |
-            <a href="logout.php">退出登录 (<?php echo getCurrentUser()['username']; ?>)</a>
-        <?php else: ?>
-            <a href="login.php">管理登录</a>
-        <?php endif; ?>
-    </div>
-
-    <?php
-    // 分页逻辑
-    $posts_per_page = 5;
-    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-    $offset = ($page - 1) * $posts_per_page;
-
-    // 获取文章总数
-    $total_query = "SELECT COUNT(id) as total FROM posts";
-    $total_result = $conn->query($total_query);
-    $total_row = $total_result->fetch_assoc();
-    $total_posts = $total_row['total'];
-    $total_pages = ceil($total_posts / $posts_per_page);
-
-    // 获取当前页文章
-    $query = "SELECT posts.*, users.username 
-              FROM posts 
-              JOIN users ON posts.user_id = users.id 
-              ORDER BY posts.created_at DESC 
-              LIMIT $offset, $posts_per_page";
-    $result = $conn->query($query);
-
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            echo '<div class="post">';
-            echo '<h2><a href="post/' . $row['id'] . '/">' . $row['title'] . '</a></h2>';
-            echo '<div class="meta">发布于 ' . date('Y-m-d H:i', strtotime($row['created_at'])) . ' 由 ' . $row['username'] . '</div>';
-            echo '<p>' . substr($row['content'], 0, 300) . '...</p>';
-            echo '<a href="post/' . $row['id'] . '/" class="read-more">阅读更多</a>';
-            echo '</div>';
-        }
-    } else {
-        echo '<p>暂无文章</p>';
-    }
-
-    // 分页链接
-    echo '<div class="pagination">';
-    for ($i = 1; $i <= $total_pages; $i++) {
-        $active = ($i == $page) ? 'class="active"' : '';
-        echo '<a href="page/' . $i . '/" ' . $active . '>' . $i . '</a>';
-    }
-    echo '</div>';
-    ?>
-
-    <footer class="footer">
-        <p><?php echo htmlspecialchars($config['copyright']); ?></p>
-        <?php if (!empty($config['icp_record'])): ?>
-            <p><a href="https://beian.miit.gov.cn/" target="_blank"><?php echo htmlspecialchars($config['icp_record']); ?></a></p>
-        <?php endif; ?>
+<div class="container">
+    <header>
+        <h1>我的博客</h1>
+        <p class="subtitle">—— 记录生活和技术</p>
+    </header>
+    <main>
+        <ul class="article-list">
+        <?php foreach ($articles_page as $art): ?>
+            <li>
+                <a class="article-title" href="/post/<?=htmlspecialchars($art['id'])?>">
+                    <?=htmlspecialchars($art['title'])?>
+                </a>
+                <span class="article-date"><?=htmlspecialchars($art['date'])?></span>
+            </li>
+        <?php endforeach; ?>
+        </ul>
+        <?=pagination($page, $pages)?>
+    </main>
+    <footer>
+        &copy; <?=date('Y')?> 我的博客 | Powered by PHP+Markdown
     </footer>
+</div>
 </body>
-</html>    
+</html>

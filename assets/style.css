@@ -1,0 +1,142 @@
+body {
+    background: #f5f7fa;
+    margin: 0; padding: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #222;
+}
+.container {
+    width: 100%;
+    max-width: 680px;
+    margin: 40px auto 0 auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.07);
+    padding: 32px 28px 18px 28px;
+}
+header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+header h1 {
+    font-size: 2.3em;
+    margin: 0 0 8px 0;
+    color: #337ab7;
+    letter-spacing: 1px;
+}
+header .subtitle {
+    color: #888;
+    font-size: 1.1em;
+    margin: 0 0 8px 0;
+}
+.article-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+}
+.article-list li {
+    padding: 18px 0;
+    border-bottom: 1px solid #eee;
+}
+.article-title {
+    font-size: 1.23em;
+    color: #337ab7;
+    text-decoration: none;
+    font-weight: bold;
+}
+.article-title:hover {
+    text-decoration: underline;
+    color: #23527c;
+}
+.article-date {
+    float: right;
+    color: #aaa;
+    font-size: 0.95em;
+}
+.pagination {
+    text-align: center;
+    margin: 24px 0 0 0;
+}
+.pagination a {
+    display: inline-block;
+    margin: 0 6px;
+    padding: 5px 13px;
+    color: #337ab7;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    text-decoration: none;
+    background: #fafbfc;
+    transition: background 0.2s;
+}
+.pagination a:hover {
+    background: #e6f1fb;
+}
+.pagination .current {
+    display: inline-block;
+    margin: 0 6px;
+    padding: 5px 13px;
+    color: #fff;
+    background: #337ab7;
+    border: 1px solid #337ab7;
+    border-radius: 4px;
+}
+footer {
+    text-align: center;
+    color: #bbb;
+    margin-top: 28px;
+    font-size: 0.98em;
+    padding-bottom: 8px;
+}
+.admin-table {width:100%;border-collapse:collapse;}
+.admin-table th,.admin-table td{border:1px solid #eee;padding:8px;}
+.admin-table th{background:#f5f7fa;}
+.op-link{margin-right:8px;}
+@media (max-width: 700px) {
+    .container {
+        max-width: 100%;
+        border-radius: 0;
+        padding: 10px 2vw 10px 2vw;
+        box-shadow: none;
+        margin: 0;
+    }
+    header {
+        margin-bottom: 10px;
+    }
+    header h1 {
+        font-size: 1.15em;
+        margin-bottom: 4px;
+    }
+    header .subtitle {
+        font-size: 0.97em;
+    }
+    .article-list li {
+        padding: 8px 0;
+    }
+    .article-title {
+        font-size: 1em;
+        word-break: break-all;
+    }
+    .article-date {
+        float: none;
+        display: block;
+        margin-top: 2px;
+        font-size: 0.93em;
+        text-align: right;
+    }
+    .pagination {
+        margin-top: 10px;
+    }
+    .pagination a, .pagination .current {
+        padding: 4px 8px;
+        font-size: 0.95em;
+    }
+    footer {
+        font-size: 0.95em;
+        margin-top: 12px;
+        padding-bottom: 4px;
+    }
+    .admin-table th, .admin-table td {
+        padding: 5px 2px;
+        font-size: 0.93em;
+        word-break: break-all;
+    }
+}

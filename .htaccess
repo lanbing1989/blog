@@ -1,8 +1,8 @@
-# 启用URL重写
 RewriteEngine On
 
-# 将 /post/3 重写为 /post.php?id=3
-RewriteRule ^post/([0-9]+)/?$ post.php?id=$1 [L,QSA]
+RewriteRule ^page/([0-9]+)$ index.php?page=$1 [L]
+RewriteRule ^post/([a-zA-Z0-9\-_]+)$ view.php?file=$1.md [L]
 
-# 将 /page/2 重写为 /index.php?page=2
-RewriteRule ^page/([0-9]+)/?$ index.php?page=$1 [L,QSA]    
+# 静态资源直接放行
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
