@@ -1,79 +1,103 @@
-这个仓库是一个基于 PHP 和 JavaScript 构建的博客系统，具备在线 Markdown 编辑功能，整体结构清晰，各部分分工明确，以下是详细介绍：
+# 博客后台管理系统
 
-### 1. 整体目录结构
+本项目是一个基于 PHP + Editor.md 的简易博客后台管理系统，支持文章管理、图片管理、附件（含 PDF 预览）管理、富文本编辑与附件插入等功能。前端采用 HTML/CSS/JavaScript，后端采用 PHP 实现，适合个人或小型团队搭建和使用。
+
+---
+
+## 主要功能
+
+- **文章管理**
+  - 新建、编辑、删除文章（支持 Markdown 格式）
+  - 文章元数据（标题、日期）自动保存
+
+- **图片管理**
+  - 支持图片上传、删除
+  - 可在文章编辑器中插入图片
+
+- **附件管理**
+  - 支持多种附件格式上传（PDF、Word、Excel、压缩包等）
+  - 附件上传后自动保存原始文件名映射，后台管理一目了然
+  - 支持附件下载和删除
+  - PDF 文件支持网页内预览
+  - 附件与图片分离管理，避免混乱
+
+- **文章编辑器**
+  - 集成 [Editor.md](https://pandao.github.io/editor.md/)
+  - 支持 Markdown 语法
+  - 独立图片上传按钮，图片自动插入内容
+  - 独立附件上传按钮，上传后以原始文件名自动生成 Markdown 链接插入内容
+
+- **安全与管理**
+  - 简单的登录验证
+  - 仅登录用户可操作后台
+  - 所有上传的文件均存储于 `/uploads/` 目录，附件信息统一映射管理
+
+---
+
+## 目录结构
+
 ```
-.htaccess
-config.php
-index.php
-upload.php
-view.php
-assets/
- admin.css
- editor.md/
- style.css
-data/
- articles/
- site.json
-lib/
- Parsedown.php
-admin/
- delete.php
- delete_image.php
- images.php
- index.html
- login.php
- logout.php
- manage.php
- write.php
-uploads/
- .htaccess
- 20250510140139_5404.jpeg
- 20250511112924_3977.jpeg
+/admin           # 后台主要页面
+    write.php        # 写/编辑文章页面
+    manage.php       # 文章管理页面
+    attachments.php  # 附件管理页面
+    images.php       # 图片管理页面
+    delete_attachment.php # 附件删除接口
+/assets          # 静态资源
+    editor.md/       # Editor.md 编辑器及依赖
+    admin.css        # 后台样式
+/uploads         # 所有上传文件存储目录
+    attachments.json # 附件原名映射表
+/config.php      # 配置文件
+/upload.php      # 图片上传接口
+/upload_attachment.php # 附件上传接口
 ```
 
-### 2. 主要功能模块
+---
 
-#### 2.1 前端部分
-- **`assets` 目录**：存放前端资源，包含 CSS 文件和 `editor.md` 编辑器相关文件。
-    - **`editor.md`**：开源在线 Markdown 编辑器，版本为 1.5.0。其主要功能如下：
-        - **加载资源**：`editormd.js`、`editormd.amd.js` 和 `src/editormd.js` 中的 `loadQueues` 方法用于按顺序加载 CSS 和 JavaScript 文件，如 `codemirror`、`marked`、`prettify` 等，根据配置决定是否加载流程图和序列图相关的脚本。
-        - **多语言支持**：`languages/en.js` 提供了英文语言包，包含工具栏、按钮和对话框的文本信息。
-        - **插件系统**：包含多个插件，如 `table-dialog`、`code-block-dialog` 和 `help-dialog` 等，用于扩展编辑器功能。
-            - **`table-dialog`**：用于插入表格，支持设置行数、列数和对齐方式。
-            - **`code-block-dialog`**：支持插入不同语言的代码块，提供了多种编程语言选项。
-            - **`help-dialog`**：显示帮助信息，从 `help.md` 文件中获取内容并渲染为 HTML。
-- **`uploads` 目录**：存储上传的图片文件，如 `20250510140139_5404.jpeg` 和 `20250511112924_3977.jpeg`。
+## 安装与使用
 
-#### 2.2 后端部分
-- **`admin` 目录**：包含博客管理的相关功能，如文章删除、图片管理、登录、注销、文章管理和撰写等。
-    - **`delete.php`**：用于删除文章。
-    - **`delete_image.php`**：用于删除图片。
-    - **`login.php`** 和 `logout.php`**：处理用户的登录和注销操作。
-    - **`manage.php`**：用于管理文章。
-    - **`write.php`**：用于撰写新文章。
-- **`data` 目录**：存储博客的数据，包括文章和网站配置信息。
-    - **`articles` 子目录**：存放 Markdown 格式的文章文件，如 `20250510214211.md`。
-    - **`site.json`**：可能包含网站的配置信息。
-- **`lib` 目录**：包含依赖库，如 `Parsedown.php`，用于解析 Markdown 文本。
+1. **环境要求：**
+   - PHP 7.0+
+   - 支持 `file_get_contents`、`file_put_contents`、`json_encode` 等常用函数
+   - 推荐使用 Nginx/Apache
 
-#### 2.3 核心文件
-- **`config.php`**：可能包含博客系统的配置信息，如数据库连接、文件路径等。
-- **`index.php`**：博客系统的入口文件，可能用于显示博客文章列表。
-- **`upload.php`**：处理文件上传请求。
-- **`view.php`**：用于查看具体的文章内容。
+2. **部署步骤：**
+   1. 克隆或下载本项目代码到服务器目录
+   2. 配置 `/config.php`（如有登录信息等）
+   3. 确保 `/uploads` 目录有写权限
+   4. 访问 `/admin/login.php` 登录后台，开始管理博客内容
 
-### 3. 依赖库
-- **`Parsedown`**：用于解析 Markdown 文本，在 `lib/Parsedown.php` 中引入。
-- **`CodeMirror`**：一个用于在浏览器中实现代码编辑的 JavaScript 库，版本为 5.0.0，`editor.md` 编辑器依赖该库实现代码编辑功能。
+3. **上传与管理说明：**
+   - 上传的所有非图片文件均视为“附件”，会保存原始文件名映射
+   - 附件管理、图片管理分开，互不干扰
+   - 删除附件会同步删除其映射关系
 
-### 4. 安装步骤
-根据 `data/articles/20250510214211.md` 文件中的信息，安装步骤如下：
-1. 克隆仓库到 web 目录。
-2. 安装依赖库：
-```bash
-composer require erusev/parsedown
-```
-3. 设置目录权限：
-```bash
-chmod -R 755 data/
-```
+---
+
+## 常见问题
+
+- **Q: 附件上传后文件名变了怎么办？**
+  - 系统自动保存原始文件名，后台、编辑器、下载均展示原名
+
+- **Q: PDF 为何可以直接预览？**
+  - 后台集成了 PDF 预览弹窗，点击即可在线查看，无需下载
+
+- **Q: 如何插入本地图片或附件到文章？**
+  - 在写文章页面，点击“上传图片”或“上传附件”按钮，上传后会自动插入到编辑器内容中
+
+- **Q: 如何扩展支持更多附件类型？**
+  - 修改 `upload_attachment.php` 中 `$allow` 数组即可
+
+---
+
+## 鸣谢
+
+- [Editor.md](https://pandao.github.io/editor.md/) - 强大的 Markdown 编辑器
+- 本项目前端样式和部分交互参考自开源社区
+
+---
+
+## License
+
+本项目开源，欢迎二次开发和自定义。请勿用于非法用途。
