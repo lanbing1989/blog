@@ -6,8 +6,8 @@ body {
     color: #222;
 }
 .container {
-    width: 100%;
-    max-width: 680px;
+    width: 1400px;
+    max-width: 1000px;
     margin: 40px auto 0 auto;
     background: #fff;
     border-radius: 8px;
@@ -261,4 +261,28 @@ pre.hljs,
         font-size: 90%;
         padding: 0.12em 0.25em;
     }
+}
+.back {
+    margin: 32px 0 0 0;
+    text-align: left;
+}
+.back a {
+    display: inline-block;
+    padding: 8px 20px 8px 14px;
+    background: #337ab7;
+    color: #fff;
+    border-radius: 22px;
+    font-size: 1.05rem;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(51,122,183,0.08);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+    position: relative;
+    font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+}
+.back a:hover {
+    background: #23527c;
+    color: #fff;
+    text-decoration: none;
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 4px 16px rgba(51,122,183,0.14);
 }

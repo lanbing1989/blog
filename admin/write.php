@@ -60,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="admin-container">
     <div class="admin-header">后台管理</div>
     <div class="admin-navbar">
+        <a href="/" target="_blank">前台首页</a>
         <a href="manage.php">文章管理</a>
         <a href="write.php">写文章</a>
         <a href="images.php">图片管理</a>

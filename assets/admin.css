@@ -7,8 +7,8 @@ body {
 }
 
 .admin-container {
-    width: 95%;
-    max-width: 780px;
+    width: 1400px;
+    max-width: 1200px;
     margin: 40px auto;
     background: #fff;
     border-radius: 10px;

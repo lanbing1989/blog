@@ -47,9 +47,9 @@ $content_html = $Parsedown->text($content_md);
     </header>
     <main>
         <h2><?=htmlspecialchars($title)?></h2>
-        <div class="article-date"><?=date('Y年m月d日', strtotime($date))?></div></br>
+        <div class="article-date"><?=date('Y年m月d日', strtotime($date))?></div></br><hr style="margin:18px 0; border:none; border-top:1.5px solid #eee;">
         <div class="article-content"><?= $content_html ?></div>
-        <div class="back"><a href="/">← 返回首页</a></div>
+        <div class="back"><a href="/">返回首页</a></div>
     </main>
     <footer>
         &copy; <?=date('Y')?> 蓝冰博客 | Powered by PHP+Markdown
