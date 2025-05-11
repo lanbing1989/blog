@@ -26,6 +26,7 @@ foreach (glob($dir . '*.{jpg,jpeg,png,gif,bmp}', GLOB_BRACE) as $img) {
         <a href="manage.php">文章管理</a>
         <a href="write.php">写文章</a>
         <a href="images.php">图片管理</a>
+        <a href="attachments.php">文件管理</a>
         <a href="settings.php">站点设置</a>
         <a href="logout.php">退出</a>
     </div>

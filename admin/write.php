@@ -47,6 +47,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "标题和内容不能为空";
     }
 }
+
+// 附件原始名映射
+function get_attachment_meta() {
+    $metaFile = __DIR__ . '/../uploads/attachments.json';
+    if (file_exists($metaFile)) {
+        return json_decode(file_get_contents($metaFile), true) ?: [];
+    }
+    return [];
+}
+$meta = get_attachment_meta();
 ?>
 <!DOCTYPE html>
 <html>
@@ -58,12 +68,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 <div class="admin-container">
-    <div class="admin-header">写文章</div>
+    <div class="admin-header">后台管理</div>
     <div class="admin-navbar">
         <a href="/" target="_blank">前台首页</a>
         <a href="manage.php">文章管理</a>
         <a href="write.php">写文章</a>
         <a href="images.php">图片管理</a>
+        <a href="attachments.php">文件管理</a>
         <a href="settings.php">站点设置</a>
         <a href="logout.php">退出</a>
     </div>
@@ -72,6 +83,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="title">标题：</label>
         <input type="text" name="title" id="title" value="<?=htmlspecialchars($title)?>" required>
         <label for="content">内容（Markdown）：</label>
+        <div style="margin-bottom:10px;">
+            <button type="button" id="custom-upload-btn" style="padding:5px 15px;">上传图片</button>
+            <input type="file" id="custom-upload-input" accept="image/*" multiple style="display:none;">
+            <button type="button" id="custom-attachment-btn" style="padding:5px 15px;">上传附件</button>
+            <input type="file" id="custom-attachment-input" multiple style="display:none;">
+        </div>
         <div id="md-editor">
             <textarea style="display:none;" name="content" id="content"><?=htmlspecialchars($content)?></textarea>
         </div>
@@ -85,13 +102,80 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <script src="/assets/editor.md/lib/jquery.min.js"></script>
 <script src="/assets/editor.md/editormd.min.js"></script>
 <script>
-editormd("md-editor", {
+window.mdEditor = editormd("md-editor", {
     width: "100%",
     height: 600,
     path : "/assets/editor.md/lib/",
-    imageUpload : true,
-    imageFormats : ["jpg", "jpeg", "gif", "png", "bmp"],
-    imageUploadURL : "/upload.php"
+    imageUpload : false
+});
+
+// 上传图片
+$('#custom-upload-btn').on('click', function() {
+    $('#custom-upload-input').val('').click();
+});
+$('#custom-upload-input').on('change', function() {
+    var files = Array.from(this.files);
+    if (!files.length) return;
+    $('#custom-upload-btn').prop('disabled', true).text('上传中...');
+    let completed = 0;
+    files.forEach(function(file) {
+        var fd = new FormData();
+        fd.append('editormd-image-file', file);
+        fetch('/upload.php', {
+            method: 'POST',
+            body: fd
+        })
+        .then(r=>r.json())
+        .then(res=>{
+            if(res.success && res.url){
+                window.mdEditor.insertValue(`![图片](${res.url})\n`);
+            }else{
+                alert(res.message || '上传失败');
+            }
+        })
+        .catch(()=>alert('上传出错'))
+        .finally(()=>{
+            completed++;
+            if(completed === files.length){
+                $('#custom-upload-btn').prop('disabled', false).text('上传图片');
+            }
+        });
+    });
+});
+
+// 上传附件并插入markdown链接，展示原始文件名
+$('#custom-attachment-btn').on('click', function() {
+    $('#custom-attachment-input').val('').click();
+});
+$('#custom-attachment-input').on('change', function() {
+    var files = Array.from(this.files);
+    if (!files.length) return;
+    $('#custom-attachment-btn').prop('disabled', true).text('上传中...');
+    let completed = 0;
+    files.forEach(function(file) {
+        var fd = new FormData();
+        fd.append('attachment-file', file);
+        fetch('/upload_attachment.php', {
+            method: 'POST',
+            body: fd
+        })
+        .then(r=>r.json())
+        .then(res=>{
+            if(res.success && res.url && res.filename){
+                // 用原始文件名
+                window.mdEditor.insertValue(`[${res.filename}](${res.url})\n`);
+            }else{
+                alert(res.message || '上传失败');
+            }
+        })
+        .catch(()=>alert('上传出错'))
+        .finally(()=>{
+            completed++;
+            if(completed === files.length){
+                $('#custom-attachment-btn').prop('disabled', false).text('上传附件');
+            }
+        });
+    });
 });
 </script>
 </body>
