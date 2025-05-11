@@ -1,5 +1,9 @@
 <?php
-define('ARTICLES_PER_PAGE', 5);
+$site = json_decode(@file_get_contents(__DIR__ . '/data/site.json'), true);
+$site_title = $site['title'] ?? '蓝冰博客';
+$site_subtitle = $site['subtitle'] ?? '—— 记录生活和技术';
+$site_footer = $site['footer'] ?? ('&copy; ' . date('Y') . ' 蓝冰博客 | Powered by PHP+Markdown');
+define('ARTICLES_PER_PAGE', 10);
 $dir = __DIR__ . '/data/articles/';
 $files = glob($dir . '*.md');
 
@@ -47,14 +51,14 @@ function pagination($page, $pages) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>蓝冰博客</title>
+    <title><?=htmlspecialchars($site_title)?></title>
     <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
 <div class="container">
     <header>
-        <h1>蓝冰博客</h1>
-        <p class="subtitle">—— 记录生活和技术</p>
+        <h1><?=htmlspecialchars($site_title)?></h1>
+        <p class="subtitle"><?=htmlspecialchars($site_subtitle)?></p>
     </header>
     <main>
         <ul class="article-list">
@@ -70,7 +74,7 @@ function pagination($page, $pages) {
         <?=pagination($page, $pages)?>
     </main>
     <footer>
-        &copy; <?=date('Y')?> 蓝冰博客 | Powered by PHP+Markdown
+       <?= $site_footer ?>
     </footer>
 </div>
 </body>

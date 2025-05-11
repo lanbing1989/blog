@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/lib/Parsedown.php';
-
+$site = json_decode(@file_get_contents(__DIR__ . '/data/site.json'), true);
+$site_title = $site['title'] ?? '蓝冰博客';
+$site_subtitle = $site['subtitle'] ?? '—— 记录生活和技术';
+$site_footer = $site['footer'] ?? ('&copy; ' . date('Y') . ' 蓝冰博客 | Powered by PHP+Markdown');
 $file = $_GET['file'] ?? '';
 if (!$file && preg_match('#/post/([a-zA-Z0-9\-_]+)#', $_SERVER['REQUEST_URI'], $m)) {
     $file = $m[1] . '.md';
@@ -30,7 +33,7 @@ $content_html = $Parsedown->text($content_md);
 <html>
 <head>
     <meta charset="utf-8">
-    <title><?=htmlspecialchars($title)?> - 蓝冰博客</title>
+    <title><?=htmlspecialchars($title)?> - <?=htmlspecialchars($site_title)?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/assets/style.css">
     <style>
@@ -42,7 +45,7 @@ $content_html = $Parsedown->text($content_md);
 <div class="container">
     <header>
         <a href="/" style="text-decoration:none;color:inherit;">
-            <h1>蓝冰博客</h1>
+            <h1><?=htmlspecialchars($site_title)?></h1>
         </a>
     </header>
     <main>
@@ -52,7 +55,7 @@ $content_html = $Parsedown->text($content_md);
         <div class="back"><a href="/">返回首页</a></div>
     </main>
     <footer>
-        &copy; <?=date('Y')?> 蓝冰博客 | Powered by PHP+Markdown
+        <?= $site_footer ?>
     </footer>
 </div>
 </body>
